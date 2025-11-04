@@ -64,6 +64,8 @@ class View:
 
         # Altri Pulsanti da implementare (es. "Mostra" e "Cerca")
         # TODO
+        pulsante_mostra_auto = ft.ElevatedButton(text = "cerca", on_click=self.controller.mostra_auto)
+        pulsante_cerca_auto = ft.ElevatedButton(text = "Cerca", on_click=self.controller.cerca_auto_per_modello)
 
         # --- LAYOUT ---
         self.page.add(
@@ -83,9 +85,21 @@ class View:
 
             # Sezione 3
             # TODO
+            ft.Row([ft.Text("Automobili", size = 18), pulsante_mostra_auto]),
+
+            self.lista_auto,
+
+            ft.Divider(),
 
             # Sezione 4
             # TODO
+            ft.Text("Cerca Automobile", size = 20),
+            ft.Row(spacing=10,
+                   controls=[self.input_modello_auto, pulsante_cerca_auto],
+                   alignment=ft.MainAxisAlignment.START),
+
+            self.lista_auto_ricerca,
+
         )
 
     def cambia_tema(self, e):

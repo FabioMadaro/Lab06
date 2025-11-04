@@ -37,6 +37,36 @@ class Autonoleggio:
         """
 
         # TODO
+        query = "SELECT * FROM automobile"
+        result = []
+
+        try:
+            cnx = get_connection()
+            if cnx is None:
+                print("Errore: Impossibile connettersi al database.")
+                return None
+
+            cursor = cnx.cursor(dictionary=True)
+            cursor.execute(query)
+
+            for row in cursor.fetchall():
+                auto = Automobile(
+                    row['codice'],
+                    row['marca'],
+                    row['modello'],
+                    row['anno'],
+                    row['posti'],
+                    row['disponibile']
+                )
+                result.append(auto)
+
+            cursor.close()
+            cnx.close()
+            return result
+
+        except Exception as err:
+            print(f"Errore nella lettura dal database: {err}")
+            return None
 
     def cerca_automobili_per_modello(self, modello) -> list[Automobile] | None:
         """
@@ -45,3 +75,32 @@ class Autonoleggio:
             :return: una lista con tutte le automobili di marca e modello indicato oppure None
         """
         # TODO
+
+        query = """SELECT * 
+                   FROM automobile
+                   WHERE modello = %s"""
+        result = []
+        try:
+            cnx = get_connection()
+            if cnx is None:
+                return None
+
+            cursor = cnx.cursor(dictionary=True)
+            cursor.execute(query, (modello,))
+
+            for row in cursor.fetchall():
+                auto = Automobile(row['codice'],
+                                  row['marca'],
+                                  row['modello'],
+                                  row['anno'],
+                                  row['posti'],
+                                  row['disponibile'])
+                result.append(auto)
+
+            cursor.close()
+            cnx.close()
+            return result
+        except Exception as err:
+            print(f"Errore nella lettura dal database: {err}")
+            return None
+
